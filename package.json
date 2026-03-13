@@ -1,0 +1,53 @@
+{
+  "name": "skills-sh",
+  "version": "1.0.0",
+  "description": "CLI for skills.sh — search, compare, and audit agent skills",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eznix86/skills-sh.git"
+  },
+  "homepage": "https://github.com/eznix86/skills-sh",
+  "bugs": {
+    "url": "https://github.com/eznix86/skills-sh/issues"
+  },
+  "keywords": [
+    "cli",
+    "skills",
+    "skills-sh",
+    "agents",
+    "ai"
+  ],
+  "main": "./dist/index.js",
+  "bin": {
+    "skills-sh": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "bun build ./index.ts --target=node --outdir ./dist",
+    "dev": "bun index.ts",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "bun run typecheck && bun run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "node-html-markdown": "^2.0.0",
+    "node-html-parser": "^6.1.13"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.4.0"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  }
+}
