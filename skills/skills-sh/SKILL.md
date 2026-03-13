@@ -1,9 +1,9 @@
 ---
-name: skill-sh-cli
-description: Search, inspect, and compare skills from skills.sh with the local CLI. Use when the user wants to find skills by keyword, browse trending or hot skills, review a skill's SKILL.md content, check weekly installs or security audits, or compare two skills side by side.
+name: skills-sh
+description: Search, inspect, and compare skills from skills.sh with the CLI. Use when the user wants to find skills by keyword, browse trending or hot skills, review a skill's SKILL.md content, check weekly installs or security audits, or compare two skills side by side.
 ---
 
-# skill-sh-cli
+# skills-sh
 
 Use this skill to operate the `skills-sh` CLI.
 
@@ -93,12 +93,4 @@ Typical usage:
 ```bash
 npx skills-sh --help
 npx skills-sh search golang
-```
-
-For local development in this repository:
-
-```bash
-bun run dev --help
-bun run build
-node dist/index.js search golang
 ```
