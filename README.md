@@ -17,6 +17,16 @@ Or run it directly:
 npx skills-sh --help
 ```
 
+## Companion Skill
+
+This project also has a companion Claude/OpenCode skill named `skills-sh`.
+
+Install it with:
+
+```bash
+npx skills add https://github.com/eznix86/skills-sh --skill skills-sh
+```
+
 ## Commands
 
 ### `search`
