@@ -1,6 +1,6 @@
 {
   "name": "skills-sh",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CLI for skills.sh — search, compare, and audit agent skills",
   "license": "MIT",
   "repository": {
