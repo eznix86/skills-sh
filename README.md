@@ -1,96 +1,146 @@
-# skills-sh CLI
+# skills-sh
 
-A CLI for [skills.sh](https://skills.sh) — search, compare, and security-audit agent skills.
-Designed to be **human-friendly**, **LLM-friendly**, and **pipeable**.
+Search, inspect, and compare skills from [skills.sh](https://skills.sh).
+
+- npm: `https://www.npmjs.com/package/skills-sh`
+- repo: `https://github.com/eznix86/skills-sh`
 
 ## Install
 
 ```bash
-npm install -g skills-sh-cli
-# or run directly
-npx skills-sh <command>
+npm install -g skills-sh
+```
+
+Or run it directly:
+
+```bash
+npx skills-sh --help
 ```
 
 ## Commands
 
 ### `search`
+
+Search by keyword:
+
 ```bash
 skills-sh search <query> [--limit n] [--json | --md]
+```
 
-# Examples
-skills-sh search mapbox
+Browse built-in categories:
+
+```bash
+skills-sh search --category=trending [--limit n] [--json | --md]
+skills-sh search --category=hot [--limit n] [--json | --md]
+```
+
+Examples:
+
+```bash
+skills-sh search golang
 skills-sh search react --limit 5
+skills-sh search --category=trending
+skills-sh search --category=hot --md
 skills-sh search typescript --json
-skills-sh search python --md
 ```
 
-### `popular`
+### `show`
+
+Show metadata and rendered `SKILL.md` content for one skill:
+
 ```bash
-skills-sh popular [--limit n] [--json | --md]
-
-skills-sh popular --limit 10
-skills-sh popular --json
+skills-sh show <owner/repo/skillId> [--meta-only] [--json | --md]
 ```
 
-### `details`
+Alias:
+
 ```bash
-skills-sh details <owner/repo/skillId> [--json | --md]
-
-skills-sh details wshobson/agents/api-design-principles
-skills-sh details wshobson/agents/api-design-principles --json
-skills-sh details wshobson/agents/api-design-principles --md
+skills-sh details <owner/repo/skillId>
 ```
+
+Examples:
+
+```bash
+skills-sh show jeffallan/claude-skills/golang-pro
+skills-sh show jeffallan/claude-skills/golang-pro --meta-only
+skills-sh show jeffallan/claude-skills/golang-pro --json
+skills-sh show jeffallan/claude-skills/golang-pro --md
+```
+
+`show` includes:
+
+- weekly installs
+- first seen
+- security audits
+- platform usage
+- source links
+- install command
+- rendered `SKILL.md` content unless `--meta-only` is used
 
 ### `compare`
+
+Compare two skills side by side:
+
 ```bash
 skills-sh compare <owner/repo/skillId> <owner/repo/skillId> [--json | --md]
-
-skills-sh compare mapbox/mapbox-agent-skills/mapbox-style-patterns \
-                  wshobson/agents/api-design-principles
-skills-sh compare ... ... --json
-skills-sh compare ... ... --md
 ```
 
-### `install`
+Examples:
+
 ```bash
-# Prints raw install command — designed to pipe directly to shell
-skills-sh install <owner/repo>
-$(skills-sh install mapbox/mapbox-agent-skills)
+skills-sh compare jeffallan/claude-skills/golang-pro affaan-m/everything-claude-code/golang-patterns
+skills-sh compare jeffallan/claude-skills/golang-pro affaan-m/everything-claude-code/golang-patterns --json
+skills-sh compare jeffallan/claude-skills/golang-pro affaan-m/everything-claude-code/golang-patterns --md
 ```
 
-## Output Formats
+`compare` focuses on:
+
+- source
+- weekly installs
+- first seen
+- security audits
+
+It intentionally does not include install commands.
+
+## Output formats
 
 | Flag | Best for |
-|------|----------|
-| _(none)_ | Human terminal use — color, aligned columns |
-| `--json` | LLM agents, scripts, `jq` piping |
-| `--md`   | LLM context injection, docs, reports |
+| --- | --- |
+| _(none)_ | Human terminal output |
+| `--json` | Scripts, agents, `jq` |
+| `--md` | Markdown reports or reusable context |
 
-## Security Audits
+## Security audits
 
-Every `details` and `compare` response includes results from three independent auditors:
+`show` and `compare` include results from three auditors:
 
 | Auditor | What it checks |
-|---------|---------------|
-| **Gen Agent Trust Hub** | Agent-specific trust and prompt safety |
-| **Socket** | Malicious packages, typosquatting, supply chain |
-| **Snyk** | Vulnerabilities, outdated deps, credential exposure |
+| --- | --- |
+| Gen Agent Trust Hub | Agent-specific trust and prompt safety |
+| Socket | Malicious packages, typosquatting, supply chain |
+| Snyk | Vulnerabilities and dependency issues |
 
 Overall status is the worst of the three: `pass` > `warn` > `fail`.
 
-> ⚠️ ~13% of all skills on skills.sh contain at least one critical security issue.
-> Always check security before installing.
+## How it works
 
-## API Notes
+- Keyword search uses `GET https://skills.sh/api/search?q=...&limit=...`
+- Category search reads the `trending` and `hot` pages from `skills.sh`
+- `show` scrapes the skill page and extracts rendered `SKILL.md` content
+- `compare` fetches both skills and formats the important metadata side by side
 
-- Search uses `GET https://skills.sh/api/search?q=...&limit=...` (official JSON API)
-- Popular uses multiple search queries + sort by installs (no leaderboard JSON API exists)
-- Details + security scrapes the skill HTML page at `skills.sh/{owner}/{repo}/{skillId}`
-
-## Dev
+## Development
 
 ```bash
-npm install
-npm run build
-node dist/index.js search mapbox
+bun install
+bun run typecheck
+bun run build
+bun run dev search golang
+bun run dev show jeffallan/claude-skills/golang-pro
+```
+
+Run the built CLI:
+
+```bash
+node dist/index.js search golang
 ```
